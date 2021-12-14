@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,11 +12,16 @@ public class PlayerController : MonoBehaviour
 
     public SpriteRenderer spriteRenderer;
     public Animator animator;
+    public TextMeshProUGUI countText;
+
+    private int count;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody2D = GetComponent<Rigidbody2D>();
+        count = 0;
+        SetCountText();
 
     }
 
@@ -46,5 +52,23 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, jumpSpeed);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Pickup"))
+        {
+            other.gameObject.SetActive(false);
+
+            count = count + 1;
+
+            SetCountText();
+        }
+    }
+
+    void SetCountText()
+    {
+        countText.text = "Count: " + count.ToString();
+
     }
 }
